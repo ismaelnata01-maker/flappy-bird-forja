@@ -1,11 +1,12 @@
+import { ShareTech_400Regular } from "@expo-google-fonts/share-tech"
+import { BlackOpsOne_400Regular } from "@expo-google-fonts/black-ops-one"
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-import { ShareTech_400Regular } from "@expo-google-fonts/share-tech"
-import { BlackOpsOne_400Regular } from "@expo-google-fonts/black-ops-one"
+
 
 // npx expo install @expo-google-fonts/black-ops-um @expo-google-fonts/share-tech
 

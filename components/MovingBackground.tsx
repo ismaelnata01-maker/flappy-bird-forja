@@ -1,15 +1,46 @@
-import { Image, StyleSheet, View } from "react-native";
+import { DURATION } from "@/constants/animation";
+import { useEffect } from "react";
+import { Dimensions, Image, StyleSheet, View } from "react-native";
+import Animated, {
+    Easing,
+    useAnimatedStyle,
+    useSharedValue,
+    withRepeat,
+    withTiming
+} from "react-native-reanimated";
 
 export default function MovingBackground() {
+    const {width} = Dimensions.get("window");
+    const translateX = useSharedValue(0);
+
+    const animatedStyle = useAnimatedStyle(() => ({
+        transform: [{translateX: -translateX.value}]
+    }));
+
+    useEffect(() => {
+        translateX.value = withRepeat(
+            withTiming(width, {
+                duration: DURATION,
+                easing: Easing.linear,
+            }),
+            -1,
+        )
+    }, [translateX]);
+
     return (
         <View style={styles.screen}>
-            <View style={styles.container}>
+            <Animated.View style={[styles.container, animatedStyle]}>
                 <Image
                     style={styles.image}
                     source={require("@/assets/images/ground.webp")}
                     resizeMode="stretch"
                 />
-            </View>
+                <Image
+                    style={styles.image}
+                    source={require("@/assets/images/ground.webp")}
+                    resizeMode="stretch"
+                />
+            </Animated.View>
         </View>
     )
 }
