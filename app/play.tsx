@@ -11,6 +11,7 @@ import Bird from "@/components/Bird";
 import { GROUND_HEIGHT } from "@/constants/ground";
 import { useGame } from "@/hooks/game";
 import { JUMP } from "@/constants/bird";
+import { View, Text } from "react-native";
 
 interface Obstacle{
     id: string;
@@ -19,7 +20,7 @@ interface Obstacle{
 
 export default function Play() {
     const { height } = Dimensions.get("window");
-    const { velocity } = useGame();
+    const { velocity, setScore, score } = useGame();
     const [obstacles, setObstacle] = useState([] as Obstacle[]);
     const jumpSound = useAudioPlayer(require("@/assets/audios/wing.mp3"));
     const pointSound = useAudioPlayer(require("@/assets/audios/point.mp3"));
@@ -37,6 +38,7 @@ export default function Play() {
     }
 
     function removeObstacle(id: string) {
+        setScore((oldValue) => ++oldValue)
         setObstacle((oldValue) => oldValue.filter((item) => item.id !== id));
         try{
             pointSound.seekTo(0);
@@ -52,7 +54,7 @@ export default function Play() {
     }
 
     useEffect(() => {
-        const interval = setInterval(() => spawObstacle(), DURATION / 4);
+        const interval = setInterval(() => spawObstacle(), DURATION / 3.5);
 
         return () => clearInterval(interval);
     }, []);
@@ -72,7 +74,16 @@ export default function Play() {
                 <SafeAreaView style={styles.screen}>
                     <Bird />
 
-                    {obstacles.map((obstacle) => <Pipe key={obstacle.id} gapY={obstacle.gapY} onEnd={() => removeObstacle(obstacle.id)} />)}
+                    {obstacles.map((obstacle) => (<Pipe key={obstacle.id} gapY={obstacle.gapY} onEnd={() => removeObstacle(obstacle.id)} />))}
+
+                <View style={styles.score}>
+                    <Text style={styles.scoreText}>{score}</Text>
+                    <Image
+                        source={require("@/assets/images/coin.gif")}
+                        style={styles.scoreImage}
+                    />
+                </View>
+
                 </SafeAreaView>
             </Pressable>
 
@@ -90,6 +101,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
         alignItems: "center",
+        overflow: "hidden",
     },
     bird: {
         width: 109,
@@ -98,4 +110,27 @@ const styles = StyleSheet.create({
         top: "50%",
         left: 100,
     },
+    score: {
+        position: "absolute",
+        top: 20,
+        right: 20,
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
+    },
+    scoreImage: {
+        height: 20,
+        width: 20,
+    },
+    scoreText: {
+        fontSize: 20,
+        fontFamily: "ShareTech",
+        textShadowColor: "black",
+        textShadowOffset: {
+            width: 1,
+            height: 1,
+        },
+        textShadowRadius: 1,
+        color: "white"
+    }
 })
