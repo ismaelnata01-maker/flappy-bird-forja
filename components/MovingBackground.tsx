@@ -1,4 +1,5 @@
 import { DURATION } from "@/constants/animation";
+import { GROUND_HEIGHT } from "@/constants/ground";
 import { useEffect } from "react";
 import { Dimensions, Image, StyleSheet, View } from "react-native";
 import Animated, {
@@ -32,12 +33,12 @@ export default function MovingBackground() {
             <Animated.View style={[styles.container, animatedStyle]}>
                 <Image
                     style={styles.image}
-                    source={require("@/assets/images/ground.webp")}
+                    source={require("@/assets/images/ground.png")}
                     resizeMode="stretch"
                 />
                 <Image
                     style={styles.image}
-                    source={require("@/assets/images/ground.webp")}
+                    source={require("@/assets/images/ground.png")}
                     resizeMode="stretch"
                 />
             </Animated.View>
@@ -58,6 +59,6 @@ const styles = StyleSheet.create({
     },
     image:{
         width: "100%",
-        height: 20,
+        height: GROUND_HEIGHT,
     },
 })

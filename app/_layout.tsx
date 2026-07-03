@@ -6,6 +6,7 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import { GameProvider } from "@/hooks/game";
 
 
 // npx expo install @expo-google-fonts/black-ops-um @expo-google-fonts/share-tech
@@ -51,9 +52,11 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
+    <GameProvider>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="play" options={{ headerShown: false }} />
       </Stack>
+    </GameProvider>
   );
 }

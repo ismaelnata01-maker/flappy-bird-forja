@@ -1,3 +1,4 @@
+import GradientText from "@/components/GradientText";
 import MovingBackground from "@/components/MovingBackground";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
@@ -12,7 +13,14 @@ export default function Home() {
             style={styles.background}
         >
             <SafeAreaView style={styles.screen}>
-                <Text style={styles.title}>Flappy Bird</Text>
+                <GradientText 
+                    colors={["#464a4d", "#a1a7aa"]}
+                    style={styles.title}
+                    start={[0, 0]}
+                    end={[1, 1]}
+                    >
+                        Delta Bird
+                    </GradientText>
 
                 <Link href="/play" asChild>
                     <TouchableOpacity style={styles.button}>
@@ -24,7 +32,7 @@ export default function Home() {
                 </Link>
 
                 <Image
-                source={require("@/assets/images/bird2.gif")}
+                source={require("@/assets/images/Starwalker_Bird1.gif")}
                 style={styles.bird}
                 />
                 </SafeAreaView>
@@ -48,6 +56,13 @@ const styles = StyleSheet.create({
         color: "white",
         marginTop: 30,
         fontFamily: "BlackOpsOne",
+        textShadowColor: "rgba(0, 0, 0, 0.5)",
+        textShadowOffset:{
+            width: 3,
+            height: 3,
+        },
+        textShadowRadius: 1,
+        paddingRight: 3,
     },
     button: {
         borderRadius: 30,
@@ -72,11 +87,11 @@ const styles = StyleSheet.create({
         fontFamily: "ShareTech",
     },
     bird: {
-        width: 70,
-        height: 48,
+        width: 85,
+        height: 58,
         position: "absolute",
-        top: "35%",
-        left: "35%",
+        top: "40%",
+        left: "30%",
         transform: [{rotate: "-20deg"}],
     },
 })
