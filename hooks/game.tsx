@@ -1,3 +1,5 @@
+import { useAudioPlayer } from "expo-audio";
+import { router } from "expo-router";
 import { createContext, ReactNode, useContext, useState } from "react";
 import { Dimensions } from "react-native";
 import { SharedValue, useSharedValue } from "react-native-reanimated"
@@ -8,6 +10,7 @@ interface GameContextProps{
     score: number;
     setScore: React.Dispatch<React.SetStateAction<number>>;
     reset: () => void;
+    gameOver: () => void;
 }
 
 const GameContext = createContext({} as GameContextProps);
@@ -17,6 +20,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     const birdY = useSharedValue(height / 2);
     const velocity = useSharedValue(0);
     const [score, setScore] = useState(0);
+    const hitAudio = useAudioPlayer(require("@/assets/audios/impact.mp3"))
 
     function reset() {
         setScore(0);
@@ -24,8 +28,16 @@ export function GameProvider({ children }: { children: ReactNode }) {
         velocity.value = 0;
     }
 
+    function gameOver(){
+        router.replace("/game-over");
+        try{
+            hitAudio.seekTo(0);
+            hitAudio.play();
+        }catch (error) {}
+    }
+
     return(
-        <GameContext.Provider value={{birdY, velocity, score, setScore, reset }}>
+        <GameContext.Provider value={{birdY, velocity, score, setScore, reset, gameOver }}>
             {children}
         </GameContext.Provider>
     );

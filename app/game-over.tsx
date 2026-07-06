@@ -8,7 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function GameOver() {
     return (
         <ImageBackground
-            source={require("@/assets/images/flappy-bird-background.png")}
+            source={require("@/assets/images/over.png")}
             resizeMode="stretch"
             style={styles.background}
         >
@@ -18,9 +18,7 @@ export default function GameOver() {
                     style={styles.title}
                     start={[0, 0]}
                     end={[1, 1]}
-                    >
-                        GAME OVER!
-                    </GradientText>
+                    > </GradientText>
 
                 <Link href="/" asChild replace>
                     <TouchableOpacity style={styles.button}>

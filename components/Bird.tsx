@@ -1,4 +1,5 @@
-import { BIRD_ASPECT_RATIO, BIRD_HEIGHT, BIRD_X, GRAVITY } from "@/constants/bird";
+import { GRAVITY } from "@/constants/animation";
+import { BIRD } from "@/constants/bird";
 import { GROUND_HEIGHT } from "@/constants/ground";
 import { useGame } from "@/hooks/game";
 import { router } from "expo-router";
@@ -9,7 +10,7 @@ import { runOnJS } from "react-native-worklets";
 
 export default function Bird(){
     const { height } = Dimensions.get("window");
-    const { birdY, velocity } = useGame();
+    const { birdY, velocity, gameOver } = useGame();
 
     const frame = useFrameCallback((frameInfo) => {
         "worklet";
@@ -20,8 +21,8 @@ export default function Bird(){
         birdY.value += velocity.value * t;
     
 
-        if(birdY.value > height - BIRD_HEIGHT - GROUND_HEIGHT) {
-            runOnJS(router.replace)("/game-over");
+        if(birdY.value > height - BIRD.height + BIRD.hitBox.bottom - GROUND_HEIGHT) {
+            runOnJS (gameOver)();
         }
 
         if(birdY.value < 0){
@@ -53,10 +54,10 @@ export default function Bird(){
 
 const styles = StyleSheet.create({
     bird: {
-        width: BIRD_HEIGHT  * BIRD_ASPECT_RATIO,
-        height: BIRD_HEIGHT,
+        width: BIRD.height  * BIRD.aspectRatio,
+        height: BIRD.height,
         position: "absolute",
         top: 0,
-        left: BIRD_X,
+        left: BIRD.x,
     },
 })

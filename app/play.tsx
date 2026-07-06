@@ -4,13 +4,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useAudioPlayer } from "expo-audio";
 import { useEffect, useState } from "react";
 import Pipe from "@/components/Pipe";
-import { DURATION } from "@/constants/animation";
+import { DURATION, JUMP } from "@/constants/animation";
 import BackgroundSound from "@/components/BackgroundSound";
 import { CAP_HEIGHT, GAP_SIZE } from "@/constants/pipe";
 import Bird from "@/components/Bird";
 import { GROUND_HEIGHT } from "@/constants/ground";
 import { useGame } from "@/hooks/game";
-import { JUMP } from "@/constants/bird";
 import { View, Text } from "react-native";
 
 interface Obstacle{
@@ -104,8 +103,8 @@ const styles = StyleSheet.create({
         overflow: "hidden",
     },
     bird: {
-        width: 109,
-        height: 78,
+        width: 85,//109,
+        height: 58,//78,
         position: "absolute",
         top: "50%",
         left: 100,
