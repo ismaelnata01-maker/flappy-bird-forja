@@ -19,6 +19,7 @@ export default function Pipe({ gapY, onEnd }: Props) {
   const bottomHeight = height - bottomY;
 
     const translateX = useSharedValue(0);
+    const disable = useSharedValue(false);
 
     const animatedStyle = useAnimatedStyle(() => ({
         transform: [{translateX: -translateX.value}],
@@ -44,12 +45,15 @@ export default function Pipe({ gapY, onEnd }: Props) {
       ({birdY, translateX}) => {
         "worklet";
 
+        if(disable.value) return;
+
         const hitX = BIRD.x + BIRD.height * BIRD.aspectRatio - BIRD.hitBox.right > width - translateX && BIRD.x + BIRD.hitBox.left < width - translateX + PIPE_WIDTH;
 
-        const hitTop = birdY < gapY - GAP_SIZE / 2;
-        const hitBottom = birdY + BIRD.height > gapY + GAP_SIZE / 2;
+        const hitTop = birdY + BIRD.hitBox.top < gapY - GAP_SIZE / 2;
+        const hitBottom = birdY + BIRD.height - BIRD.hitBox.bottom > gapY + GAP_SIZE / 2;
 
         if(hitX && (hitTop || hitBottom)){
+          disable.value = true;
           runOnJS(gameOver)();
         }
       }

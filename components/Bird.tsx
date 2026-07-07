@@ -3,17 +3,20 @@ import { BIRD } from "@/constants/bird";
 import { GROUND_HEIGHT } from "@/constants/ground";
 import { useGame } from "@/hooks/game";
 import { router } from "expo-router";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Dimensions, StyleSheet } from "react-native";
-import Animated, { useAnimatedStyle, useFrameCallback } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, useFrameCallback, useSharedValue } from "react-native-reanimated";
 import { runOnJS } from "react-native-worklets";
 
 export default function Bird(){
     const { height } = Dimensions.get("window");
     const { birdY, velocity, gameOver } = useGame();
+    const disable = useSharedValue(false);
 
     const frame = useFrameCallback((frameInfo) => {
         "worklet";
+
+        if(disable.value) return;
 
         const t = (frameInfo.timeSincePreviousFrame ?? 0) / 1000;
 
@@ -22,6 +25,7 @@ export default function Bird(){
     
 
         if(birdY.value > height - BIRD.height + BIRD.hitBox.bottom - GROUND_HEIGHT) {
+            disable.value = true;
             runOnJS (gameOver)();
         }
 

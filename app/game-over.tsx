@@ -1,11 +1,14 @@
 import GradientText from "@/components/GradientText";
 import MovingBackground from "@/components/MovingBackground";
+import { useGame } from "@/hooks/game";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function GameOver() {
+    const {score} = useGame();
+
     return (
         <ImageBackground
             source={require("@/assets/images/over.png")}
@@ -13,12 +16,12 @@ export default function GameOver() {
             style={styles.background}
         >
             <SafeAreaView style={styles.screen}>
-                <GradientText 
+                <GradientText
                     colors={["#464a4d", "#a1a7aa"]}
                     style={styles.title}
                     start={[0, 0]}
                     end={[1, 1]}
-                    > </GradientText>
+                > </GradientText>
 
                 <Link href="/" asChild replace>
                     <TouchableOpacity style={styles.button}>
@@ -26,14 +29,22 @@ export default function GameOver() {
                             <Text style={styles.buttonText}> Voltar ao menu </Text>
                         </LinearGradient>
                     </TouchableOpacity>
-                
+
                 </Link>
 
                 <Image
-                source={require("@/assets/images/Starwalker_Bird1.gif")}
-                style={styles.bird}
+                    source={require("@/assets/images/Starwalker_Bird1.gif")}
+                    style={styles.bird}
                 />
-                </SafeAreaView>
+
+                <View style={styles.score}>
+                    <Text style={styles.scoreText}>{score}</Text>
+                    <Image
+                        source={require("@/assets/images/coin.gif")}
+                        style={styles.scoreImage}
+                    />
+                </View>
+            </SafeAreaView>
             <MovingBackground />
         </ImageBackground>
     )
@@ -55,7 +66,7 @@ const styles = StyleSheet.create({
         marginTop: 30,
         fontFamily: "BlackOpsOne",
         textShadowColor: "rgba(0, 0, 0, 0.5)",
-        textShadowOffset:{
+        textShadowOffset: {
             width: 3,
             height: 3,
         },
@@ -66,13 +77,13 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         position: "absolute",
         top: "50%",
-        transform: [{translateY: "-50%"}],
+        transform: [{ translateY: "-50%" }],
         shadowColor: "black",
-        shadowOffset: { width: 1, height: 2},
+        shadowOffset: { width: 1, height: 2 },
         shadowOpacity: 0.5,
         boxShadow: "0px 4px 2px",
     },
-    buttonGradient:{
+    buttonGradient: {
         paddingHorizontal: 20,
         paddingVertical: 12,
         width: "100%",
@@ -90,6 +101,29 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: "40%",
         left: "30%",
-        transform: [{rotate: "-20deg"}],
+        transform: [{ rotate: "-20deg" }],
+    },
+    score: {
+        position: "absolute",
+        top: 20,
+        right: 20,
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
+    },
+    scoreImage: {
+        height: 20,
+        width: 20,
+    },
+    scoreText: {
+        fontSize: 20,
+        fontFamily: "ShareTech",
+        textShadowColor: "black",
+        textShadowOffset: {
+            width: 1,
+            height: 1,
+        },
+        textShadowRadius: 1,
+        color: "white"
     },
 })

@@ -11,41 +11,48 @@ import Bird from "@/components/Bird";
 import { GROUND_HEIGHT } from "@/constants/ground";
 import { useGame } from "@/hooks/game";
 import { View, Text } from "react-native";
+import { useSharedValue } from "react-native-reanimated";
+import { BIRD } from "@/constants/bird";
 
-interface Obstacle{
+interface Obstacle {
     id: string;
     gapY: number;
 }
 
+const { height } = Dimensions.get("window");
+
 export default function Play() {
-    const { height } = Dimensions.get("window");
     const { velocity, setScore, score } = useGame();
     const [obstacles, setObstacle] = useState([] as Obstacle[]);
+    const [started, setStarted] = useState(false);
+
     const jumpSound = useAudioPlayer(require("@/assets/audios/wing.mp3"));
     const pointSound = useAudioPlayer(require("@/assets/audios/point.mp3"));
 
     function handleJump() {
+        if (!started) setStarted(true);
+
         velocity.value = JUMP;
-        try{
+        try {
             jumpSound.seekTo(0);
             jumpSound.play();
-        } catch (error) {}
+        } catch (error) { }
     }
 
     function spawObstacle() {
-        setObstacle((oldValue) => [...oldValue, {id: Date.now().toString(), gapY: randomGapY()},]);
+        setObstacle((oldValue) => [...oldValue, { id: Date.now().toString(), gapY: randomGapY() },]);
     }
 
     function removeObstacle(id: string) {
         setScore((oldValue) => ++oldValue)
         setObstacle((oldValue) => oldValue.filter((item) => item.id !== id));
-        try{
+        try {
             pointSound.seekTo(0);
             pointSound.play();
-        } catch (error) {};
+        } catch (error) { };
     }
 
-    function randomGapY(){
+    function randomGapY() {
         const min = CAP_HEIGHT + GAP_SIZE / 2;
         const max = height - CAP_HEIGHT - GROUND_HEIGHT - GAP_SIZE / 2;
 
@@ -53,12 +60,14 @@ export default function Play() {
     }
 
     useEffect(() => {
-        const interval = setInterval(() => spawObstacle(), DURATION / 3.5);
+        if (started) {
+            const interval = setInterval(() => spawObstacle(), DURATION / 3.5);
 
-        return () => clearInterval(interval);
-    }, []);
+            return () => clearInterval(interval);
+        }
+    }, [started]);
 
-    
+
 
     return (
         <ImageBackground
@@ -67,21 +76,27 @@ export default function Play() {
             style={styles.background}
         >
 
-        <BackgroundSound source={require("@/assets/audios/hammer.mp3")}/>
+            <BackgroundSound source={require("@/assets/audios/hammer.mp3")} />
 
             <Pressable onPress={handleJump} style={styles.background}>
                 <SafeAreaView style={styles.screen}>
-                    <Bird />
+                    {started ? (
+                        <Bird />
+                    ) : (
+                        <Image source={require("@/assets/images/Starwalker_Bird1.gif")} 
+                        style={styles.bird}
+                        />
+                    )}
 
                     {obstacles.map((obstacle) => (<Pipe key={obstacle.id} gapY={obstacle.gapY} onEnd={() => removeObstacle(obstacle.id)} />))}
 
-                <View style={styles.score}>
-                    <Text style={styles.scoreText}>{score}</Text>
-                    <Image
-                        source={require("@/assets/images/coin.gif")}
-                        style={styles.scoreImage}
-                    />
-                </View>
+                    <View style={styles.score}>
+                        <Text style={styles.scoreText}>{score}</Text>
+                        <Image
+                            source={require("@/assets/images/coin.gif")}
+                            style={styles.scoreImage}
+                        />
+                    </View>
 
                 </SafeAreaView>
             </Pressable>
@@ -101,13 +116,6 @@ const styles = StyleSheet.create({
         height: "100%",
         alignItems: "center",
         overflow: "hidden",
-    },
-    bird: {
-        width: 85,//109,
-        height: 58,//78,
-        position: "absolute",
-        top: "50%",
-        left: 100,
     },
     score: {
         position: "absolute",
@@ -131,5 +139,12 @@ const styles = StyleSheet.create({
         },
         textShadowRadius: 1,
         color: "white"
-    }
-})
+    },
+    bird: {
+        width: BIRD.height * BIRD.aspectRatio,
+        height: BIRD.height,
+        position: "absolute",
+        left: BIRD.x,
+        top: height / 2,
+    },
+});
