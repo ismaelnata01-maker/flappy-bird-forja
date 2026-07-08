@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "flappy-bird",
-    "slug": "flappy-bird",
+    "slug": "delta-bird",
     "version": "1.0.0",
     "orientation": "landscape",
     "icon": "./assets/images/icon.png",
@@ -22,7 +22,12 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ],
+      "package": "com.anonymous.flappybird"
     },
     "web": {
       "bundler": "metro",
@@ -35,6 +40,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "1ca56183-819c-4800-8735-69c5bfeaa848"
+      }
+    },
+    "owner": "sma404s-organization"
   }
 }
