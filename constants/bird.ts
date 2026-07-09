@@ -4,7 +4,7 @@ export const BIRD = {
     x: 100,
 
     hitBox: {
-        top: 10,
+        top: 20,//10,
         bottom: 12,
         left: 66,
         right: 66,

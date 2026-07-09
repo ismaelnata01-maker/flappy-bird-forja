@@ -1,3 +1,4 @@
+import BackgroundSound from "@/components/BackgroundSound";
 import GradientText from "@/components/GradientText";
 import MovingBackground from "@/components/MovingBackground";
 import { useGame } from "@/hooks/game";
@@ -15,6 +16,9 @@ export default function GameOver() {
             resizeMode="stretch"
             style={styles.background}
         >
+
+            <BackgroundSound source={require("@/assets/audios/over.mp3")} delay={1000} />
+
             <SafeAreaView style={styles.screen}>
                 <GradientText
                     colors={["#464a4d", "#a1a7aa"]}
