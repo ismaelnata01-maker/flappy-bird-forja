@@ -1,14 +1,16 @@
 import { useAudioPlayer } from "expo-audio";
 import { router } from "expo-router";
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { Dimensions } from "react-native";
 import { SharedValue, useSharedValue } from "react-native-reanimated"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 interface GameContextProps{
     birdY: SharedValue<number>;
     velocity: SharedValue<number>;
     score: number;
     setScore: React.Dispatch<React.SetStateAction<number>>;
+    highscore: number;
     reset: () => void;
     gameOver: () => void;
 }
@@ -20,6 +22,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     const birdY = useSharedValue(height / 2);
     const velocity = useSharedValue(0);
     const [score, setScore] = useState(0);
+    const [highscore, setHightscore] = useState(0);
     const hitAudio = useAudioPlayer(require("@/assets/audios/impact.mp3"))
 
     function reset() {
@@ -34,10 +37,18 @@ export function GameProvider({ children }: { children: ReactNode }) {
             hitAudio.seekTo(0);
             hitAudio.play();
         }catch (error) {}
+        if(score > highscore){
+            setHightscore(score);
+            AsyncStorage.setItem("highstore", score.toString());
+        }
     }
 
+    useEffect(() => {
+        AsyncStorage.getItem("highscore").then((value) => setHightscore(+(value || 0)));
+    }, []);
+
     return(
-        <GameContext.Provider value={{birdY, velocity, score, setScore, reset, gameOver }}>
+        <GameContext.Provider value={{birdY, velocity, score, setScore, highscore, reset, gameOver }}>
             {children}
         </GameContext.Provider>
     );

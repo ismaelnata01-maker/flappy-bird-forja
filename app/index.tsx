@@ -8,7 +8,7 @@ import { useGame } from "@/hooks/game";
 
 export default function Home() {
     
-    const { reset } = useGame();
+    const { reset, highscore } = useGame();
     
     return (
         <ImageBackground
@@ -34,7 +34,7 @@ export default function Home() {
                     </TouchableOpacity>
                 
                 </Link>
-
+                <Text style={styles.highscore}>Melhor Pontuação: {highscore}</Text>
                 <Image
                 source={require("@/assets/images/Starwalker_Bird1.gif")}
                 style={styles.bird}
@@ -97,5 +97,12 @@ const styles = StyleSheet.create({
         top: "40%",
         left: "30%",
         transform: [{rotate: "-20deg"}],
+    },
+    highscore: {
+        color:"white",
+        fontSize: 20,
+        fontFamily: "BlackOpsOne",
+        position: "absolute",
+        bottom: "25%",
     },
 })
