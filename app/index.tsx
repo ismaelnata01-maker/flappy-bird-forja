@@ -2,14 +2,14 @@ import GradientText from "@/components/GradientText";
 import MovingBackground from "@/components/MovingBackground";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGame } from "@/hooks/game";
 
 export default function Home() {
-    
+
     const { reset, highscore } = useGame();
-    
+
     return (
         <ImageBackground
             source={require("@/assets/images/flappy-bird-background.png")}
@@ -17,29 +17,40 @@ export default function Home() {
             style={styles.background}
         >
             <SafeAreaView style={styles.screen}>
-                <GradientText 
+                <GradientText
                     colors={["#464a4d", "#a1a7aa"]}
                     style={styles.title}
                     start={[0, 0]}
                     end={[1, 1]}
-                    >
-                        Delta Bird
-                    </GradientText>
+                >
+                    Delta Bird
+                </GradientText>
 
-                <Link href="/play" asChild replace>
-                    <TouchableOpacity style={styles.button} onPress={reset}>
-                        <LinearGradient colors={["#464a4d", "#a1a7aa"]} style={styles.buttonGradient}>
-                            <Text style={styles.buttonText}>🎮 Jogar 🎮</Text>
-                        </LinearGradient>
-                    </TouchableOpacity>
-                
-                </Link>
+                <View style={styles.view}>
+                    <Link href="/play" asChild replace>
+                        <TouchableOpacity style={styles.button} onPress={reset}>
+                            <LinearGradient colors={["#464a4d", "#a1a7aa"]} style={styles.buttonGradient}>
+                                <Text style={styles.buttonText}>🎮 Jogar 🎮</Text>
+                            </LinearGradient>
+                        </TouchableOpacity>
+
+                    </Link>
+                    <Link href="/skins" asChild replace>
+                        <TouchableOpacity style={styles.button} onPress={reset}>
+                            <LinearGradient colors={["#161515", "#4c00ff"]} style={styles.buttonGradient}>
+                                <Text style={styles.buttonText}> Skins </Text>
+                            </LinearGradient>
+                        </TouchableOpacity>
+
+                    </Link>
+                </View>
+
                 <Text style={styles.highscore}>Melhor Pontuação: {highscore}</Text>
                 <Image
-                source={require("@/assets/images/Starwalker_Bird1.gif")}
-                style={styles.bird}
+                    source={require("@/assets/images/Starwalker_Bird1.gif")}
+                    style={styles.bird}
                 />
-                </SafeAreaView>
+            </SafeAreaView>
             <MovingBackground />
         </ImageBackground>
     )
@@ -61,29 +72,32 @@ const styles = StyleSheet.create({
         marginTop: 30,
         fontFamily: "BlackOpsOne",
         textShadowColor: "rgba(0, 0, 0, 0.5)",
-        textShadowOffset:{
+        textShadowOffset: {
             width: 3,
             height: 3,
         },
         textShadowRadius: 1,
         paddingRight: 3,
     },
-    button: {
-        borderRadius: 30,
+    view: {
         position: "absolute",
         top: "50%",
-        transform: [{translateY: "-50%"}],
+        transform: [{ translateY: "-50%" }],
+    },
+    button: {
+        borderRadius: 30,
         shadowColor: "black",
-        shadowOffset: { width: 1, height: 2},
+        shadowOffset: { width: 1, height: 2 },
         shadowOpacity: 0.5,
         boxShadow: "0px 4px 2px",
+        top:20,
     },
-    buttonGradient:{
+    buttonGradient: {
         paddingHorizontal: 20,
         paddingVertical: 12,
         width: "100%",
-        height: "100%",
         borderRadius: 100,
+        alignItems: "center"
     },
     buttonText: {
         color: "white",
@@ -96,13 +110,14 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: "40%",
         left: "30%",
-        transform: [{rotate: "-20deg"}],
+        transform: [{ rotate: "-20deg" }],
     },
     highscore: {
-        color:"white",
+        color: "white",
         fontSize: 20,
         fontFamily: "BlackOpsOne",
         position: "absolute",
         bottom: "25%",
     },
-})
+    }
+);
