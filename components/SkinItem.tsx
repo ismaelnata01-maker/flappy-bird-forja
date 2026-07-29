@@ -1,6 +1,7 @@
 import { Skin } from "@/constants/skins";
 import { LinearGradient } from "expo-linear-gradient";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useGame } from "@/hooks/game";
 
 interface Props {
     item: Skin;
@@ -8,6 +9,12 @@ interface Props {
 }
 
 export default function SkinItem({ item, index }: Props) {
+
+    const { CoinLow, coin, setSelectedSkin, unlockedSkins } = useGame();
+
+    const unlocked =
+        item.price === 0 || unlockedSkins.includes(item.name);
+
     return (
         <View style={styles.container}>
             <Image
@@ -16,15 +23,24 @@ export default function SkinItem({ item, index }: Props) {
                 resizeMode="center"
             />
 
-            <TouchableOpacity style={styles.button}>
-                <LinearGradient colors={["#464a4d", "#a1a7aa"]} style={styles.buttonGradient}>
-                    <Image
-                        source={require("@/assets/images/coin.gif")}
-                        style={styles.coin}
-                    />
-                    <Text style={styles.buttonText}>20</Text>
-                </LinearGradient>
-            </TouchableOpacity>
+            {unlocked ? (
+                <TouchableOpacity style={styles.button} onPress={() => setSelectedSkin(index)}>
+                    <LinearGradient colors={["#464a4d", "#a1a7aa"]} style={styles.buttonGradient}>
+                        <Text style={styles.buttonText}>select</Text>
+                    </LinearGradient>
+                </TouchableOpacity>
+            ) : (
+                <TouchableOpacity style={styles.button} onPress={() => CoinLow(item)} disabled={item.price > coin}>
+                    <LinearGradient colors={["#464a4d", "#a1a7aa"]} style={styles.buttonGradient}>
+                        <Image
+                            source={require("@/assets/images/coin.gif")}
+                            style={styles.scoreImage}
+                        />
+                        <Text style={styles.buttonText}>{item.price}</Text>
+                    </LinearGradient>
+                </TouchableOpacity>
+            )}
+
         </View>
     )
 }
@@ -57,7 +73,7 @@ const styles = StyleSheet.create({
         boxShadow: "0px 4px 2px",
         width: "100%"
     },
-    coin: {
+    scoreImage: {
         height: 30,
         width: 30,
     }

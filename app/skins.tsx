@@ -1,10 +1,12 @@
 import SkinItem from "@/components/SkinItem";
 import { skins } from "@/constants/skins";
-import { FlatList, ImageBackground, StyleSheet } from "react-native";
+import { FlatList, ImageBackground, StyleSheet, Text, View, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useGame } from "@/hooks/game";
 
 
 export default function Skins() {
+    const { coin } = useGame();
     return (
         <ImageBackground
         source={require("@/assets/images/flappy-bird-background.png")}
@@ -20,6 +22,14 @@ export default function Skins() {
                 showsHorizontalScrollIndicator={false}
                 renderItem={({item, index}) => (<SkinItem item={item} index={index}/>)}
             />
+
+            <View style={styles.coins}>
+                <Text style={styles.coinText}>{coin}</Text>
+                <Image
+                    source={require("@/assets/images/coin.gif")}
+                    style={styles.coin}
+                />
+            </View>
 
          </SafeAreaView>
         </ImageBackground>
@@ -60,4 +70,21 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         gap: 20,
     },
+    coinText: {
+        fontSize: 20,
+        fontFamily: "ShareTech",
+        color: "white",
+    },
+    coin: {
+        height: 20,
+        width: 20,
+    },
+    coins:{
+        position: "absolute",
+        top: 20,
+        right: 20,
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
+    }
 })
