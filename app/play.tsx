@@ -11,8 +11,8 @@ import Bird from "@/components/Bird";
 import { GROUND_HEIGHT } from "@/constants/ground";
 import { useGame } from "@/hooks/game";
 import { View, Text } from "react-native";
-import { useSharedValue } from "react-native-reanimated";
 import { BIRD } from "@/constants/bird";
+import { skins } from "@/constants/skins";
 
 interface Obstacle {
     id: string;
@@ -22,7 +22,8 @@ interface Obstacle {
 const { height } = Dimensions.get("window");
 
 export default function Play() {
-    const { velocity, setScore, score } = useGame();
+    const { velocity, setScore, score, selectedSkin } = useGame();
+    const selectedBird = skins[selectedSkin];
     const [obstacles, setObstacle] = useState([] as Obstacle[]);
     const [started, setStarted] = useState(false);
 
@@ -83,8 +84,8 @@ export default function Play() {
                     {started ? (
                         <Bird />
                     ) : (
-                        <Image source={require("@/assets/images/Starwalker_Bird1.gif")} 
-                        style={styles.bird}
+                        <Image source={selectedBird.image}
+                        style={[styles.bird, {height: selectedBird.height, width: selectedBird.width}]}
                         />
                     )}
 
@@ -141,8 +142,6 @@ const styles = StyleSheet.create({
         color: "white"
     },
     bird: {
-        width: BIRD.height * BIRD.aspectRatio,
-        height: BIRD.height,
         position: "absolute",
         left: BIRD.x,
         top: height / 2,

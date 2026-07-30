@@ -10,8 +10,8 @@ export const skins = [
     {
         name: "Starwalker",
         image: require("@/assets/images/Starwalker_Bird1.gif"),
-        height: 86,
-        width: 86 * 465 / 250,
+        height: 76,
+        width: 66 * 465 / 250,
         price: 0,
     },
     {

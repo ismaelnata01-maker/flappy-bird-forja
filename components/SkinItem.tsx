@@ -10,13 +10,13 @@ interface Props {
 
 export default function SkinItem({ item, index }: Props) {
 
-    const { CoinLow, coin, setSelectedSkin, unlockedSkins } = useGame();
+    const { CoinLow, coin, selectSkin, selectedSkin, unlockedSkins } = useGame();
 
     const unlocked =
         item.price === 0 || unlockedSkins.includes(item.name);
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, selectedSkin === index && styles.border]}>
             <Image
                 source={item.image}
                 style={{ height: item.height, width: item.width }}
@@ -24,7 +24,7 @@ export default function SkinItem({ item, index }: Props) {
             />
 
             {unlocked ? (
-                <TouchableOpacity style={styles.button} onPress={() => setSelectedSkin(index)}>
+                <TouchableOpacity style={styles.button} onPress={() => selectSkin(index)}>
                     <LinearGradient colors={["#464a4d", "#a1a7aa"]} style={styles.buttonGradient}>
                         <Text style={styles.buttonText}>select</Text>
                     </LinearGradient>
@@ -49,6 +49,11 @@ const styles = StyleSheet.create({
     container: {
         height: "100%",
         alignItems: "center"
+    },
+    border:{
+        borderColor: "#eeff00",
+        borderWidth: 5,
+        borderRadius: 20,
     },
     buttonText: {
         color: "white",

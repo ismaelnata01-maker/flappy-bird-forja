@@ -1,16 +1,17 @@
 import { GRAVITY } from "@/constants/animation";
 import { BIRD } from "@/constants/bird";
 import { GROUND_HEIGHT } from "@/constants/ground";
+import { skins } from "@/constants/skins";
 import { useGame } from "@/hooks/game";
-import { router } from "expo-router";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import Animated, { useAnimatedStyle, useFrameCallback, useSharedValue } from "react-native-reanimated";
 import { runOnJS } from "react-native-worklets";
 
 export default function Bird(){
     const { height } = Dimensions.get("window");
-    const { birdY, velocity, gameOver } = useGame();
+    const { birdY, velocity, gameOver, selectedSkin } = useGame();
+    const selectedBird = skins[selectedSkin];
     const disable = useSharedValue(false);
 
     const frame = useFrameCallback((frameInfo) => {
@@ -50,16 +51,14 @@ export default function Bird(){
 
     return(
      <Animated.Image
-        source={require("@/assets/images/Starwalker_Bird1.gif")}
-        style={[styles.bird, animatedStyle]}
+        style={[styles.bird, animatedStyle,{height: selectedBird.height, width: selectedBird.width}]}
+        source={selectedBird.image}
     />
     );
 }
 
 const styles = StyleSheet.create({
     bird: {
-        width: BIRD.height  * BIRD.aspectRatio,
-        height: BIRD.height,
         position: "absolute",
         top: 0,
         left: BIRD.x,

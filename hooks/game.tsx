@@ -15,7 +15,7 @@ interface GameContextProps{
     reset: () => void;
     gameOver: () => void;
     selectedSkin: number;
-    setSelectedSkin: React.Dispatch<React.SetStateAction<number>>;
+    selectSkin: (index: number) => void;
     coin: number;
     CoinLow: (skin: Skin) => void;
     unlockedSkins: string[];
@@ -80,6 +80,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         if (value) {
             setUnlockedSkins(JSON.parse(value));
         }
+    
     });
 }, []);
 
@@ -90,7 +91,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     //}, []);
 
     return(
-        <GameContext.Provider value={{birdY, velocity, score, setScore, highscore, reset, gameOver, selectedSkin, setSelectedSkin, coin, CoinLow,
+        <GameContext.Provider value={{birdY, velocity, score, setScore, highscore, reset, gameOver, selectedSkin, selectSkin, coin, CoinLow,
     unlockedSkins,
   }}
 >
